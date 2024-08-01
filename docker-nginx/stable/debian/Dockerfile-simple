@@ -1,0 +1,25 @@
+# 使用Debian最新稳定版本作为基础镜像
+FROM debian:stable-slim
+
+# 维护者信息（可选）
+LABEL maintainer="jumploop"
+
+# 安装Nginx
+# 1. 更新包索引
+# 2. 安装Nginx
+# 3. 清理临时文件，以减小镜像大小
+RUN apt-get update && \
+    apt-get install -y nginx && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# 转发请求和错误日志到docker日志收集器
+# 这是一个好习惯，特别是在处理容器日志时
+RUN ln -sf /dev/stdout /var/log/nginx/access.log \
+    && ln -sf /dev/stderr /var/log/nginx/error.log
+
+# 暴露80（HTTP）和443（HTTPS）端口
+EXPOSE 80 443
+
+# 启动Nginx，使用前台模式以适应Docker的工作方式
+CMD ["nginx", "-g", "daemon off;"]
