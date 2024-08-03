@@ -8,7 +8,7 @@ ARG BRANCH=master
 
 RUN apt-get update && apt-get -y install gcc g++ make libcurl4-openssl-dev wget unzip
 
-RUN wget -q --no-check-certificate https://github.com/jumploop/ServerStatus/archive/refs/heads/$BRANCH.zip -P $WORK  \
+RUN wget -q --no-check-certificate https://github.com/jumploop/ServerStatus/archive/refs/heads/$BRANCH.zip -P $WORK \
     && unzip $WORK/$BRANCH.zip -d $WORK && rm -rf $WORK/*.zip
 
 WORKDIR $WORK/ServerStatus-$BRANCH/server
@@ -17,7 +17,6 @@ RUN make -j
 RUN pwd && ls -a
 RUN mv $WORK/ServerStatus-$BRANCH/* /
 # glibc env run
-
 FROM looprt/caddy:ubuntu-latest
 
 RUN mkdir -p /ServerStatus/server/
@@ -25,7 +24,7 @@ WORKDIR /ServerStatus/server/
 COPY --from=builder server /ServerStatus/server/
 COPY --from=builder web /usr/share/caddy/
 COPY ./start_caddy.sh ./
-
+RUN chmod +x ./start_caddy.sh
 # china time
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone

@@ -25,7 +25,7 @@ WORKDIR /ServerStatus/server/
 COPY --from=builder server /ServerStatus/server/
 COPY --from=builder web /usr/share/caddy/
 COPY ./start_caddy.sh ./
-
+RUN chmod +x ./start_caddy.sh
 # china time
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone

@@ -17,15 +17,13 @@ RUN pwd && ls -a
 RUN mv $WORK/ServerStatus-$BRANCH/* /
 # glibc env run
 FROM nginx:latest
-
-RUN rm -f /var/log/nginx/*
-#ln -sf /dev/null /var/log/nginx/access.log && ln -sf /dev/null /var/log/nginx/error.log
+RUN ln -sf /dev/null /var/log/nginx/access.log && ln -sf /dev/null /var/log/nginx/error.log
 RUN mkdir -p /ServerStatus/server/
 WORKDIR /ServerStatus/server/
 COPY --from=builder server /ServerStatus/server/
 COPY --from=builder web /usr/share/nginx/html/
 COPY ./start_nginx.sh ./
-
+RUN chmod +x ./start_nginx.sh
 # china time
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
