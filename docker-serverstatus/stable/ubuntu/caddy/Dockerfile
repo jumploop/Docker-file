@@ -19,7 +19,7 @@ RUN mv $WORK/ServerStatus-$BRANCH/* /
 # glibc env run
 FROM looprt/caddy:ubuntu-latest
 
-RUN mkdir -p /ServerStatus/server/
+RUN mkdir -p /ServerStatus/server
 WORKDIR /ServerStatus/server/
 COPY --from=builder server /ServerStatus/server/
 COPY --from=builder web /usr/share/caddy/
