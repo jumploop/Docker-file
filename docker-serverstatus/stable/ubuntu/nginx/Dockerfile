@@ -16,11 +16,11 @@ RUN make -j
 RUN pwd && ls -a
 RUN mv $WORK/ServerStatus-$BRANCH/* /
 # glibc env run
-FROM looprt/nginx:test
+FROM looprt/nginx:ubuntu-latest
 
 #RUN rm -f /var/log/nginx/*
-#RUN ln -sf /dev/null /var/log/nginx/access.log && ln -sf /dev/null /var/log/nginx/error.log
-RUN mkdir -p /ServerStatus/server/
+RUN ln -sf /dev/null /var/log/nginx/access.log && ln -sf /dev/null /var/log/nginx/error.log
+RUN mkdir -p /ServerStatus/server
 WORKDIR /ServerStatus/server/
 COPY --from=builder server /ServerStatus/server/
 COPY --from=builder web /usr/share/nginx/html/
