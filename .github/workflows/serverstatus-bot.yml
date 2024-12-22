@@ -1,0 +1,29 @@
+name: Docker Image CI for serverstatus-bot
+
+on:
+  push:
+    branches: ["master"]
+  schedule:
+    - cron: "45 12 * * *"
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build the Docker image and Push the Docker image to Docker Hub
+        env:
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        run: |
+          docker login -u "$DOCKER_USERNAME" -p "$DOCKER_TOKEN"
+          cd docker-serverstatus-bot/stable/serverchan
+          docker buildx build --platform linux/amd64,linux/arm64 -t looprt/serverstatus_bot:serverchan --push .
+          cd docker-serverstatus-bot/stable/telegram
+          docker buildx build --platform linux/amd64,linux/arm64 -t looprt/serverstatus_bot:latest --push .
+
