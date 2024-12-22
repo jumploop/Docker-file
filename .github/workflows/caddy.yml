@@ -22,8 +22,9 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         run: |
           docker login -u "$DOCKER_USERNAME" -p "$DOCKER_TOKEN"
-          cd docker-caddy/stable/debian
+          root=$(pwd)
+          cd ${root}/docker-caddy/stable/debian
           docker buildx build --platform linux/amd64,linux/arm64 -t looprt/caddy:latest --push .
-          cd docker-caddy/stable/ubuntu
+          cd ${root}/docker-caddy/stable/ubuntu
           docker buildx build --platform linux/amd64,linux/arm64 -t looprt/caddy:ubuntu-latest --push .
 

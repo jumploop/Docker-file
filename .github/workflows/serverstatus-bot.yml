@@ -22,8 +22,9 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         run: |
           docker login -u "$DOCKER_USERNAME" -p "$DOCKER_TOKEN"
-          cd docker-serverstatus-bot/stable/serverchan
+          root=$(pwd)
+          cd ${root}/docker-serverstatus-bot/stable/alpine/serverchan
           docker buildx build --platform linux/amd64,linux/arm64 -t looprt/serverstatus_bot:serverchan --push .
-          cd docker-serverstatus-bot/stable/telegram
+          cd ${root}/docker-serverstatus-bot/stable/alpine/telegram
           docker buildx build --platform linux/amd64,linux/arm64 -t looprt/serverstatus_bot:latest --push .
 

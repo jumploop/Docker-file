@@ -22,9 +22,10 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         run: |
           docker login -u "$DOCKER_USERNAME" -p "$DOCKER_TOKEN"
-          cd docker-serverstatus/stable/ubuntu/caddy
+          root=$(pwd)
+          cd ${root}/docker-serverstatus/stable/ubuntu/caddy
           docker buildx build --platform linux/amd64,linux/arm64 -t looprt/serverstatus_server:ubuntu-caddy --push .
-          cd docker-serverstatus/stable/ubuntu/nginx
+          cd ${root}/docker-serverstatus/stable/ubuntu/nginx
           docker buildx build --platform linux/amd64,linux/arm64 -t looprt/serverstatus_server:ubuntu-latest --push .
-          cd docker-serverstatus/stable/debian/caddy
+          cd ${root}/docker-serverstatus/stable/debian/caddy
           docker buildx build --platform linux/amd64,linux/arm64 -t looprt/serverstatus_server:caddy --push .
