@@ -6,21 +6,22 @@ LABEL version="0.0.1"
 ARG WORK=/root
 ARG BRANCH=master
 
-RUN apt-get update && apt-get -y install gcc g++ make libcurl4-openssl-dev wget unzip
+RUN apt-get update  \
+    && apt-get -y install gcc g++ make libcurl4-openssl-dev wget unzip  \
+    && wget -q --no-check-certificate https://github.com/jumploop/ServerStatus/archive/refs/heads/$BRANCH.zip -P $WORK \
+    && unzip $WORK/$BRANCH.zip -d $WORK  \
+    && rm -rf $WORK/*.zip \
+    && cd $WORK/ServerStatus-$BRANCH/server \
+    && make -j \
+    && pwd && ls -a \
+    && mv $WORK/ServerStatus-$BRANCH/* /
 
-RUN wget -q --no-check-certificate https://github.com/jumploop/ServerStatus/archive/refs/heads/$BRANCH.zip -P $WORK \
-    && unzip $WORK/$BRANCH.zip -d $WORK && rm -rf $WORK/*.zip
 
-WORKDIR $WORK/ServerStatus-$BRANCH/server
-
-RUN make -j
-RUN pwd && ls -a
-RUN mv $WORK/ServerStatus-$BRANCH/* /
 # glibc env run
 FROM looprt/caddy:ubuntu-latest
 
-RUN mkdir -p /ServerStatus/server
-WORKDIR /ServerStatus/server/
+RUN mkdir -p /ServerStatus/server && ln -sf /dev/null /var/log/nginx/access.log && ln -sf /dev/null /var/log/nginx/error.log
+
 COPY --from=builder server /ServerStatus/server/
 COPY --from=builder web /usr/share/caddy/
 COPY ./start_caddy.sh ./

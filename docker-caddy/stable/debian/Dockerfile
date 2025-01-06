@@ -21,8 +21,5 @@ RUN apt-get update  && \
 # 暴露Caddy默认端口
 EXPOSE 80 443
 
-# 设置工作目录，这是Caddy存储文件和Caddyfile的地方
-WORKDIR /var/www/html
-
 # 设置默认命令：运行Caddy
 CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
