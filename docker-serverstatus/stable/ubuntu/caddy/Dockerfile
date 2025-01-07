@@ -20,7 +20,7 @@ RUN apt-get update  \
 # glibc env run
 FROM looprt/caddy:ubuntu-latest
 
-RUN mkdir -p /ServerStatus/server && ln -sf /dev/null /var/log/nginx/access.log && ln -sf /dev/null /var/log/nginx/error.log
+RUN mkdir -p /ServerStatus/server
 
 COPY --from=builder server /ServerStatus/server/
 COPY --from=builder web /usr/share/caddy/
