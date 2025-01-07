@@ -3,7 +3,7 @@
 #
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
-FROM ubuntu:bookworm
+FROM ubuntu
 
 LABEL maintainer="NGINX Docker Maintainers <docker-maint@nginx.com>"
 
