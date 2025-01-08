@@ -24,12 +24,11 @@ RUN mkdir -p /ServerStatus/server/
 
 COPY --from=builder server /ServerStatus/server/
 COPY --from=builder web /usr/share/caddy/
-COPY ./start_caddy.sh ./
-RUN chmod +x ./start_caddy.sh
+
 # china time
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 EXPOSE 80 35601
 HEALTHCHECK --interval=5s --timeout=3s --retries=3 CMD curl --fail http://localhost:80 || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
-CMD ["./start_caddy.sh"]
+CMD ["sh","-c", "/usr/bin/caddy start --config /etc/caddy/Caddyfile && /ServerStatus/server/sergate --config=/ServerStatus/server/config.json --web-dir=/usr/share/caddy"]
