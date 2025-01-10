@@ -17,13 +17,9 @@ RUN apt-get update  \
 
 
 # glibc env run
-FROM ubuntu:latest
+FROM looprt/nginx:ubuntu-latest
 
-RUN mkdir -p /ServerStatus/server && ln -sf /dev/null /var/log/nginx/access.log && ln -sf /dev/null /var/log/nginx/error.log  \
-    && apt-get update  \
-    && apt-get -y install nginx \
-    && apt-get clean  \
-    && rm -rf /var/lib/apt/lists/*
+RUN mkdir -p /ServerStatus/server && ln -sf /dev/null /var/log/nginx/access.log && ln -sf /dev/null /var/log/nginx/error.log
 
 COPY --from=builder server /ServerStatus/server/
 COPY --from=builder web /usr/share/nginx/html/
