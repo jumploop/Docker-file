@@ -2,6 +2,7 @@
 FROM debian:stable-slim AS builder
 
 LABEL maintainer="jumploop"
+LABEL version="0.0.1"
 ARG WORK=/root
 ARG BRANCH=master
 
